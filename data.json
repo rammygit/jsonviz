@@ -1,0 +1,90 @@
+{
+  "ruleset_name": "HomePurchaseRules",
+  "version": "1.0",
+  "description": "Rules to guide the decision-making process for purchasing a home",
+  "rules": [
+    {
+      "id": "rule_001",
+      "name": "Check Credit Score",
+      "priority": 1,
+      "description": "Ensure buyer has a minimum credit score to qualify for a mortgage",
+      "conditions": {
+        "credit_score": {
+          "operator": ">=",
+          "value": 700
+        }
+      },
+      "actions": {
+        "status": "pass",
+        "next_step": "Proceed to affordability check"
+      }
+    },
+    {
+      "id": "rule_002",
+      "name": "Check Affordability",
+      "priority": 2,
+      "description": "Verify if buyer can afford the property based on income and debt ratio",
+      "conditions": {
+        "monthly_income": {
+          "operator": ">=",
+          "value": 5000
+        },
+        "debt_to_income_ratio": {
+          "operator": "<=",
+          "value": 0.4
+        }
+      },
+      "actions": {
+        "status": "pass",
+        "next_step": "Check property eligibility"
+      }
+    },
+    {
+      "id": "rule_003",
+      "name": "Property Eligibility",
+      "priority": 3,
+      "description": "Ensure the property meets required criteria (legal, location, condition)",
+      "conditions": {
+        "legal_clearance": true,
+        "location_verified": true,
+        "condition_rating": {
+          "operator": ">=",
+          "value": 3
+        }
+      },
+      "actions": {
+        "status": "pass",
+        "next_step": "Initiate appraisal and inspection"
+      }
+    },
+    {
+      "id": "rule_004",
+      "name": "Appraisal Value Check",
+      "priority": 4,
+      "description": "Verify that the appraised value is at least equal to the asking price",
+      "conditions": {
+        "appraisal_value": {
+          "operator": ">=",
+          "value_field": "asking_price"
+        }
+      },
+      "actions": {
+        "status": "pass",
+        "next_step": "Move to offer and negotiation"
+      }
+    },
+    {
+      "id": "rule_005",
+      "name": "Pre-approval Verification",
+      "priority": 5,
+      "description": "Confirm that the buyer has pre-approval from a financial institution",
+      "conditions": {
+        "pre_approved": true
+      },
+      "actions": {
+        "status": "pass",
+        "next_step": "Finalize purchase decision"
+      }
+    }
+  ]
+}

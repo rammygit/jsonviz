@@ -1,0 +1,19 @@
+{
+  "name": "jsonrules",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "express": "^5.1.0",
+    "graphlib": "^2.1.8",
+    "graphlib-dot": "^0.6.4",
+    "viz.js": "^2.1.2"
+  }
+}
