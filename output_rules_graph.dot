@@ -1,10 +1,12 @@
 strict digraph {
   rule_001 [label="Check Credit Score (P1)"]
+  rule_001a [label="Check Credit Score 1a step (P2)"]
   rule_002 [label="Check Affordability (P2)"]
   rule_003 [label="Property Eligibility (P3)"]
   rule_004 [label="Appraisal Value Check (P4)"]
   rule_005 [label="Pre-approval Verification (P5)"]
   rule_001 -> rule_002
+  rule_001a -> rule_002
   rule_002 -> rule_003
   rule_003 -> rule_004
   rule_004 -> rule_005

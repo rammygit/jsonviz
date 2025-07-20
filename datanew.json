@@ -20,6 +20,22 @@
       }
     },
     {
+      "id": "rule_001a",
+      "name": "Check Credit Score 1a step",
+      "priority": 2,
+      "description": "Ensure buyer has a minimum credit score to qualify for a mortgage",
+      "conditions": {
+        "credit_score": {
+          "operator": ">=",
+          "value": 700
+        }
+      },
+      "actions": {
+        "status": "pass",
+        "next_step": "rule_002"
+      }
+    },
+    {
       "id": "rule_002",
       "name": "Check Affordability",
       "priority": 2,

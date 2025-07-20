@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Rules Builder</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .quick-setup {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .quick-setup h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+        
+        .setup-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .form-section {
+            background: #fff;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        
+        .form-section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .icon {
+            width: 24px;
+            height: 24px;
+            background: #3498db;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #555;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .rule-builder {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-right: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 25px rgba(52, 152, 219, 0.4);
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60, #229954);
+            color: white;
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+        }
+        
+        .rules-preview {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+        
+        .rules-counter {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .json-display {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .toast {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+        
+        .toast.show {
+            transform: translateX(0);
+        }
+        
+        .toast-success { background: linear-gradient(135deg, #27ae60, #229954); }
+        .toast-warning { background: linear-gradient(135deg, #f39c12, #e67e22); }
+        .toast-info { background: linear-gradient(135deg, #3498db, #2980b9); }
+        
+        @media (max-width: 768px) {
+            .setup-row, .rule-builder {
+                grid-template-columns: 1fr;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+            
+            .btn {
+                width: 100%;
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <div class="header">
+            <h1>Business Rules Builder</h1>
+            <p>Create and manage your business rules with ease</p>
+        </div>
+        
+        <div class="content">
+            <!-- Quick Setup -->
+            <div class="quick-setup">
+                <h3>📋 Quick Setup</h3>
+                <div class="setup-row">
+                    <input type="text" id="rulesetName" placeholder="Rule Set Name" value="HomePurchaseRules">
+                    <input type="text" id="version" placeholder="Version" value="1.0">
+                </div>
+                <textarea id="description" rows="2" placeholder="Describe what these rules are for...">Rules to guide the decision-making process for purchasing a home</textarea>
+            </div>
+            
+            <!-- Rule Builder -->
+            <div class="form-section">
+                <h2><span class="icon">+</span>Add New Rule</h2>
+                
+                <form id="ruleForm">
+                    <div class="rule-builder">
+                        <div class="input-group">
+                            <label>Rule Name</label>
+                            <input type="text" id="ruleName" placeholder="e.g., Budget Check" required>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Priority Level</label>
+                            <select id="priority" required>
+                                <option value="">Choose priority...</option>
+                                <option value="Critical">🔴 Critical</option>
+                                <option value="High">🟠 High</option>
+                                <option value="Medium">🟡 Medium</option>
+                                <option value="Low">🟢 Low</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group full-width">
+                            <label>What should this rule do?</label>
+                            <textarea id="ruleDescription" rows="2" placeholder="Describe when and how this rule should apply..." required></textarea>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Rule Category</label>
+                            <select id="category" required>
+                                <option value="">Select category...</option>
+                                <option value="Financial">💰 Record Type</option>
+                                <option value="Location">📍 Upstream Check</option>
+                                <option value="Property">🏠 Vendor Guardrails</option>
+                                <option value="Legal">⚖️ Log</option>
+                                <option value="Personal">👤 Alert</option>
+                            </select>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label>Action to Take</label>
+                            <select id="action" required>
+                                <option value="">What will be the record type?</option>
+                                <option value="F">✅ Flip</option>
+                                <option value="D">❌ Delete</option>
+                                <option value="U">🔍 Update</option>
+                                <option value="N">🚩 New</option>
+                                <option value="M">✅ Month</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="input-group">
+                        <label>Rule Logic (Optional)</label>
+                        <textarea id="condition" rows="2" placeholder="e.g., If budget is more than 20% above asking price, then approve"></textarea>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Add Rule</button>
+                    <button type="button" class="btn btn-secondary" onclick="clearRules()">Clear All</button>
+                    <button type="button" class="btn btn-success" onclick="downloadRules()">Download Rules</button>
+                </form>
+            </div>
+            
+            <!-- Rules Preview -->
+            <div class="rules-preview">
+                <div class="rules-counter" id="rulesCounter">0 Rules Created</div>
+                <div class="json-display" id="jsonDisplay"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let ruleset = {
+            ruleset_name: "HomePurchaseRules",
+            version: "1.0",
+            description: "Rules to guide the decision-making process for purchasing a home",
+            rules: []
+        };
+        
+        let ruleCounter = 1;
+        
+        // Form handler
+        document.getElementById('ruleForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Update ruleset info
+            ruleset.ruleset_name = document.getElementById('rulesetName').value || 'MyRuleset';
+            ruleset.version = document.getElementById('version').value || '1.0';
+            ruleset.description = document.getElementById('description').value || 'Business rules';
+            
+            // Create rule
+            const rule = {
+                ruleId: `R${String(ruleCounter).padStart(3, '0')}`,
+                ruleName: document.getElementById('ruleName').value,
+                ruleDescription: document.getElementById('ruleDescription').value,
+                priority: document.getElementById('priority').value,
+                category: document.getElementById('category').value.replace(/[^\w\s]/gi, ''), // Remove emojis for JSON
+                condition: document.getElementById('condition').value || 'Manual review required',
+                action: document.getElementById('action').value,
+                enabled: true,
+                created_at: new Date().toISOString()
+            };
+            
+            ruleset.rules.push(rule);
+            ruleCounter++;
+            
+            updateDisplay();
+            this.reset();
+            showToast('Rule added successfully! 🎉', 'success');
+        });
+        
+        function updateDisplay() {
+            const counter = document.getElementById('rulesCounter');
+            const display = document.getElementById('jsonDisplay');
+            
+            counter.textContent = `${ruleset.rules.length} Rule${ruleset.rules.length !== 1 ? 's' : ''} Created`;
+            display.textContent = JSON.stringify(ruleset, null, 2);
+        }
+        
+        function clearRules() {
+            if (ruleset.rules.length === 0) {
+                showToast('No rules to clear! 📝', 'info');
+                return;
+            }
+            
+            if (confirm('Clear all rules? This cannot be undone.')) {
+                ruleset.rules = [];
+                ruleCounter = 1;
+                updateDisplay();
+                showToast('All rules cleared! 🗑️', 'info');
+            }
+        }
+        
+        function downloadRules() {
+            if (ruleset.rules.length === 0) {
+                showToast('Add some rules first! 📋', 'warning');
+                return;
+            }
+            
+            const blob = new Blob([JSON.stringify(ruleset, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            
+            a.href = url;
+            a.download = `${ruleset.ruleset_name.replace(/\s+/g, '')}-v${ruleset.version}.json`;
+            a.click();
+            
+            URL.revokeObjectURL(url);
+            showToast('Rules downloaded! 📥', 'success');
+        }
+        
+        function showToast(message, type) {
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.textContent = message;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => toast.classList.add('show'), 100);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => document.body.removeChild(toast), 400);
+            }, 3000);
+        }
+        
+        // Auto-update ruleset info
+        ['rulesetName', 'version', 'description'].forEach(id => {
+            document.getElementById(id).addEventListener('blur', () => {
+                ruleset.ruleset_name = document.getElementById('rulesetName').value || 'MyRuleset';
+                ruleset.version = document.getElementById('version').value || '1.0';
+                ruleset.description = document.getElementById('description').value || 'Business rules';
+                updateDisplay();
+            });
+        });
+        
+        // Initialize
+        updateDisplay();
+    </script>
+</body>
+</html>
